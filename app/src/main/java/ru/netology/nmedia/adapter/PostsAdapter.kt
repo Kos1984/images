@@ -1,15 +1,22 @@
 package ru.netology.nmedia.adapter
 
+import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
+import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.view.load
 import ru.netology.nmedia.view.loadCircleCrop
 
 interface OnInteractionListener {
@@ -17,6 +24,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun onWatchImage(post: Post) {}
 }
 
 class PostsAdapter(
@@ -46,6 +54,12 @@ class PostViewHolder(
             avatar.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
+            if (post.attachment?.url == null){
+                imageView.visibility = View.GONE
+            }else{
+                imageView.load("${BuildConfig.BASE_URL}/media/${post.attachment.url}")
+                imageView.visibility = View.VISIBLE
+            }
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -73,6 +87,10 @@ class PostViewHolder(
 
             share.setOnClickListener {
                 onInteractionListener.onShare(post)
+            }
+
+            imageView.setOnClickListener {
+               onInteractionListener.onWatchImage(post)
             }
         }
     }

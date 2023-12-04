@@ -81,7 +81,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintBottom_toTopOf="@id/imageView"
             tools:text="@sample/posts.json/data/content" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/footer"
+            tools:layout_editor_absoluteX="16dp"
+            tools:src="@tools:sample/avatars[2]"
+            android:adjustViewBounds="true"/>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/footer"
